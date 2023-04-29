@@ -9,8 +9,8 @@ locals {
 variable "tags" {
   default = {
     terraform = "yes",
-    resource  = "AKS",
-    purpose   = "demo"
+    resource  = "azure_kubernetes_cluster",
+    purpose   = "epo"
   }
 }
 
@@ -20,4 +20,24 @@ variable "address_space" {
 
 variable "publicip_sku" {
   default = ["Basic","Standard"]
+}
+
+variable "dns_prefix" {
+  default = "azurek8sdemo"
+}
+
+variable "agent_pool" {
+  default = ["defaultpool","Standard_D2s_v3"]
+}
+
+variable "client_id" {
+  default = ""
+}
+
+variable "client_secret" {
+  default = ""
+}
+
+variable "network_profile" {
+  default = ["azure", "kubenet", "Standard"]
 }
