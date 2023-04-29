@@ -13,3 +13,7 @@ variable "tags" {
     purpose   = "demo"
   }
 }
+
+variable "address_space" {
+  default = ["10.1.0.0/16", "10.1.0.0/24", "10.1.0.0/32"]
+}
