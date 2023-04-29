@@ -31,5 +31,5 @@ variable "agent_pool" {
 }
 
 variable "network_profile" {
-  default = ["azure", "kubenet", "Standard"]
+  default = ["azure", "kubenet", "basic"]
 }

@@ -51,6 +51,9 @@ resource "azurerm_public_ip" "public_ip" {
   sku                 = element(var.publicip_sku, 1)
 }
 
+
+
+
 resource "azurerm_kubernetes_cluster" "k8s_cluster" {
   dns_prefix         = var.dns_prefix
   location           = var.location
@@ -62,7 +65,6 @@ resource "azurerm_kubernetes_cluster" "k8s_cluster" {
     name             = element(var.agent_pool,0)
     vm_size          = element(var.agent_pool,1)
     node_count       = 2
-    availability_zones = ["1","2"]
   }
 
   service_principal {
@@ -73,21 +75,6 @@ resource "azurerm_kubernetes_cluster" "k8s_cluster" {
     network_plugin    = element(var.network_profile, 0)
     load_balancer_sku = element(var.network_profile, 2)
     network_policy    = element(var.network_profile, 0)
-  }
-
-  role_based_access_control {
-    enabled = true
-  }
-
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.azure_works.id
-    }
-
-    kube_dashboard {
-      enabled = true
-    }
   }
   lifecycle {
     ignore_changes = [
