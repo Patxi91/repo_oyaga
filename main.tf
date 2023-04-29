@@ -14,7 +14,7 @@ resource "azurerm_log_analytics_workspace" "azure_works" {
   name                = "k8s-workspace-${random_id.azure_random.hex}"
   resource_group_name = azurerm_resource_group.oyaga_azure_k8s.name
   sku                 = "PerGB2018"
-  retention_in_days   = 15
+  retention_in_days   = 30
 }
 
 resource "azurerm_log_analytics_solution" "azure_logs" {
@@ -37,30 +37,31 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                 = "${local.common_name}-subnet"
+  name                 = "${local.name}-subnet"
   resource_group_name  = azurerm_resource_group.oyaga_azure_k8s.name
   virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = [element(var.address_space, 1)]
 }
 
 resource "azurerm_public_ip" "public_ip" {
   location            = var.location
   name                = "${local.name}-public_ip"
   resource_group_name = azurerm_resource_group.oyaga_azure_k8s.name
-  allocation_method = "Static"
-  sku = element(var.publicip_sku,1 )
+  allocation_method   = "Static"
+  sku                 = element(var.publicip_sku, 1)
 }
 
 resource "azurerm_kubernetes_cluster" "k8s_cluster" {
   dns_prefix         = var.dns_prefix
   location           = var.location
-  kubernetes_version = "1.17.8"
+  kubernetes_version = "1.16.7"
   name               = "${local.name}-k8scluster"
 
   resource_group_name = azurerm_resource_group.oyaga_azure_k8s.name
   default_node_pool {
     name             = element(var.agent_pool,0)
     vm_size          = element(var.agent_pool,1)
-    node_count       = 2  # high availability k8s instead of a single master
+    node_count       = 2
     availability_zones = ["1","2"]
   }
 
@@ -69,23 +70,21 @@ resource "azurerm_kubernetes_cluster" "k8s_cluster" {
     client_secret = var.client_secret
   }
   network_profile {
-    network_plugin    = element(var.network_profile, 0)  # azure
-    load_balancer_sku = element(var.network_profile, 2)  # Standard
-    network_policy    = element(var.network_profile, 0)  # azure
+    network_plugin    = element(var.network_profile, 0)
+    load_balancer_sku = element(var.network_profile, 2)
+    network_policy    = element(var.network_profile, 0)
   }
 
   role_based_access_control {
     enabled = true
   }
 
-  # Monitoring
   addon_profile {
     oms_agent {
       enabled                    = true
       log_analytics_workspace_id = azurerm_log_analytics_workspace.azure_works.id
     }
 
-    # Dashboard
     kube_dashboard {
       enabled = true
     }

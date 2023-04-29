@@ -48,3 +48,19 @@ To use this Terraform script, you will need the following prerequisites:
 ### Conclusion
 
 This repository provides a simple and automated way to deploy an Azure kubernetes cluster using Terraform. By using infrastructure as code, we can easily deploy and manage our cluster, allowing to focus on developing and deploying apps.
+
+------------------------------------------------------------------------
+
+## Description
+
+Creation of the service principal via Azure CLI:
+```
+az ad sp create-for-rbac
+
+{
+  "appId": "fcb0218e-3526-4f73-8afe-333a53639b1f",
+  "displayName": "azure-cli-2023-04-29-09-28-23",
+  "password": "secret",
+  "tenant": "2968a404-4e44-4565-ab42-27eee32f4851"
+}
+```

@@ -19,7 +19,7 @@ variable "address_space" {
 }
 
 variable "publicip_sku" {
-  default = ["Basic","Standard"]
+  default = ["Basic", "Standard"]
 }
 
 variable "dns_prefix" {
@@ -27,15 +27,7 @@ variable "dns_prefix" {
 }
 
 variable "agent_pool" {
-  default = ["defaultpool","Standard_D2s_v3"]
-}
-
-variable "client_id" {
-  default = ""
-}
-
-variable "client_secret" {
-  default = ""
+  default = ["defaultpool", "Standard_D2s_v3"]
 }
 
 variable "network_profile" {
