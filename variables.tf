@@ -17,3 +17,7 @@ variable "tags" {
 variable "address_space" {
   default = ["10.1.0.0/16", "10.1.0.0/24", "10.1.0.0/32"]
 }
+
+variable "publicip_sku" {
+  default = ["Basic","Standard"]
+}

@@ -29,8 +29,22 @@ resource "azurerm_log_analytics_solution" "azure_logs" {
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  address_space       = [element(var.address_space, 1)]
+  address_space       = [element(var.address_space, 0)]
   location            = var.location
   name                = "${local.name}-vnet"
   resource_group_name = azurerm_resource_group.oyaga_azure_k8s.name
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                 = "${local.common_name}-subnet"
+  resource_group_name  = azurerm_resource_group.oyaga_azure_k8s.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+}
+
+resource "azurerm_public_ip" "public_ip" {
+  location            = var.location
+  name                = "${local.name}-public_ip"
+  resource_group_name = azurerm_resource_group.oyaga_azure_k8s.name
+  allocation_method = "Static"
+  sku = element(var.publicip_sku,1 )
 }
